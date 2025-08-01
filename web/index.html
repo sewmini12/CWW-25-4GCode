@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkinCare AI - Skin Disease Detection</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>SkinCare AI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#analyze" class="nav-link">Analyze</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>AI-Powered Skin Disease Detection</h1>
+            <p>Upload a photo of your skin condition and get instant AI analysis with treatment suggestions</p>
+            <button class="cta-button" onclick="scrollToAnalyze()">
+                <i class="fas fa-camera"></i>
+                Start Analysis
+            </button>
+        </div>
+        <div class="hero-image">
+            <i class="fas fa-microscope"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose SkinCare AI?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-camera-retro"></i>
+                    <h3>Photo Upload</h3>
+                    <p>Simply upload a clear photo of your skin condition</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>AI Analysis</h3>
+                    <p>Advanced AI algorithms analyze your image instantly</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-pills"></i>
+                    <h3>Treatment Suggestions</h3>
+                    <p>Get personalized treatment recommendations</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Privacy First</h3>
+                    <p>Your data is secure and processed locally</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Section -->
+    <section id="analyze" class="analysis-section">
+        <div class="container">
+            <h2>Skin Condition Analysis</h2>
+            <div class="analysis-container">
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Upload Your Photo</h3>
+                        <p>Drag and drop an image here or click to browse</p>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        <button class="upload-button" onclick="document.getElementById('file-input').click()">
+                            Choose File
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="analysis-result" id="analysis-result" style="display: none;">
+                    <div class="result-header">
+                        <h3>Analysis Result</h3>
+                        <button class="new-analysis-btn" onclick="resetAnalysis()">
+                            <i class="fas fa-redo"></i>
+                            New Analysis
+                        </button>
+                    </div>
+                    <div class="result-content">
+                        <div class="uploaded-image">
+                            <img id="uploaded-preview" src="" alt="Uploaded image">
+                        </div>
+                        <div class="result-details">
+                            <div class="condition-result">
+                                <h4>Detected Condition:</h4>
+                                <p id="condition-name" class="condition-name"></p>
+                                <p id="confidence" class="confidence"></p>
+                            </div>
+                            <div class="treatment-suggestions">
+                                <h4>Treatment Suggestions:</h4>
+                                <ul id="treatment-list"></ul>
+                            </div>
+                            <div class="disclaimer">
+                                <p><strong>⚠️ Disclaimer:</strong> This is an AI-powered analysis and should not replace professional medical advice. Please consult a dermatologist for proper diagnosis and treatment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyzing your image...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2>About SkinCare AI</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>SkinCare AI is a cutting-edge web application that leverages artificial intelligence to help identify common skin conditions. Our system can detect various skin diseases including:</p>
+                    <ul>
+                        <li><strong>Acne:</strong> Common inflammatory skin condition</li>
+                        <li><strong>Eczema:</strong> Chronic inflammatory skin disorder</li>
+                        <li><strong>Psoriasis:</strong> Autoimmune skin condition</li>
+                        <li><strong>Melanoma:</strong> Serious form of skin cancer</li>
+                        <li><strong>Rosacea:</strong> Chronic facial skin condition</li>
+                    </ul>
+                    <p>Our AI model has been trained to recognize patterns and characteristics of these conditions, providing you with instant preliminary analysis.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat">
+                        <h3>5+</h3>
+                        <p>Skin Conditions</p>
+                    </div>
+                    <div class="stat">
+                        <h3>Instant</h3>
+                        <p>Analysis</p>
+                    </div>
+                    <div class="stat">
+                        <h3>AI-Powered</h3>
+                        <p>Detection</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SkinCare AI</h3>
+                    <p>AI-powered skin disease detection for better health awareness.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Important Note</h4>
+                    <p>This tool is for educational purposes only. Always consult healthcare professionals for medical advice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SkinCare AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

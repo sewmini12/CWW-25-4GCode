@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.upload-area {
+  @apply border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-emerald-400 transition-colors;
+}
+
+.upload-area.dragover {
+  @apply border-emerald-500 bg-emerald-50;
+}
+
+.btn-primary {
+  @apply bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-6;
+}
+
+.disease-card {
+  @apply bg-white rounded-lg shadow-md p-4 border-l-4 border-emerald-500;
+}
+
+.notification-badge {
+  @apply bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center;
+}
