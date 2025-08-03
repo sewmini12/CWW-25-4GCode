@@ -9,7 +9,7 @@ import logging
 import os
 from werkzeug.utils import secure_filename
 # import cv2  # Comment out to avoid OpenCV issues
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -207,6 +207,188 @@ def health_check():
         'timestamp': datetime.now().isoformat(),
         'model_loaded': classifier.model is not None
     })
+
+@app.route('/outbreaks', methods=['GET'])
+def get_outbreaks():
+    """Get current disease outbreak data"""
+    try:
+        # Get location parameter
+        location = request.args.get('location', 'global')
+        
+        # Mock outbreak data - in real app, this would come from health databases
+        outbreak_data = [
+            {
+                "id": 1,
+                "disease": "Eczema",
+                "location": "California, USA",
+                "coordinates": {"lat": 36.7783, "lng": -119.4179},
+                "severity": "medium",
+                "cases": 45,
+                "trend": "increasing",
+                "date": datetime.now().strftime("%Y-%m-%d"),
+                "description": "Seasonal eczema outbreak reported in coastal areas. Higher humidity levels may be contributing factor.",
+                "source": "California Department of Health",
+                "recommendations": [
+                    "Use gentle, fragrance-free moisturizers",
+                    "Avoid hot showers and baths",
+                    "Wear breathable cotton clothing",
+                    "Consult dermatologist if symptoms worsen"
+                ]
+            },
+            {
+                "id": 2,
+                "disease": "Psoriasis",
+                "location": "London, UK",
+                "coordinates": {"lat": 51.5074, "lng": -0.1278},
+                "severity": "low",
+                "cases": 23,
+                "trend": "stable",
+                "date": (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"),
+                "description": "Minor increase in psoriasis cases following extreme weather patterns.",
+                "source": "NHS England",
+                "recommendations": [
+                    "Maintain regular skincare routine",
+                    "Use prescribed topical treatments",
+                    "Avoid known triggers",
+                    "Monitor for changes in symptoms"
+                ]
+            },
+            {
+                "id": 3,
+                "disease": "Melanoma",
+                "location": "Sydney, Australia",
+                "coordinates": {"lat": -33.8688, "lng": 151.2093},
+                "severity": "high",
+                "cases": 78,
+                "trend": "increasing",
+                "date": datetime.now().strftime("%Y-%m-%d"),
+                "description": "Summer season showing increased melanoma detections. Enhanced UV exposure warnings in effect.",
+                "source": "Australian Department of Health",
+                "recommendations": [
+                    "Use SPF 30+ sunscreen daily",
+                    "Seek shade during peak UV hours",
+                    "Wear protective clothing and hats",
+                    "Regular skin self-examinations"
+                ]
+            },
+            {
+                "id": 4,
+                "disease": "Acne",
+                "location": "New York, USA",
+                "coordinates": {"lat": 40.7128, "lng": -74.0060},
+                "severity": "low",
+                "cases": 34,
+                "trend": "decreasing",
+                "date": (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d"),
+                "description": "Teenage acne cases showing seasonal improvement with current weather conditions.",
+                "source": "NYC Health Department",
+                "recommendations": [
+                    "Maintain consistent cleansing routine",
+                    "Use non-comedogenic products",
+                    "Avoid touching face frequently",
+                    "Consider professional treatment if persistent"
+                ]
+            },
+            {
+                "id": 5,
+                "disease": "Rosacea",
+                "location": "Berlin, Germany",
+                "coordinates": {"lat": 52.5200, "lng": 13.4050},
+                "severity": "medium",
+                "cases": 29,
+                "trend": "increasing",
+                "date": datetime.now().strftime("%Y-%m-%d"),
+                "description": "Cold weather triggering increased rosacea flare-ups in urban areas.",
+                "source": "German Dermatological Society",
+                "recommendations": [
+                    "Use gentle, hypoallergenic skincare",
+                    "Protect skin from extreme temperatures",
+                    "Identify and avoid personal triggers",
+                    "Consider prescription treatments"
+                ]
+            }
+        ]
+        
+        # Filter by location if specified
+        if location != 'global':
+            location_filters = {
+                'north-america': ['USA', 'Canada', 'Mexico'],
+                'europe': ['UK', 'Germany', 'France', 'Italy', 'Spain'],
+                'asia': ['Japan', 'China', 'India', 'South Korea'],
+                'oceania': ['Australia', 'New Zealand'],
+                'local': ['California', 'New York']  # Simulate user's local area
+            }
+            
+            if location in location_filters:
+                filtered_data = []
+                for outbreak in outbreak_data:
+                    for country in location_filters[location]:
+                        if country in outbreak['location']:
+                            filtered_data.append(outbreak)
+                            break
+                outbreak_data = filtered_data
+        
+        # Calculate summary statistics
+        total_cases = sum(outbreak['cases'] for outbreak in outbreak_data)
+        high_severity_count = len([o for o in outbreak_data if o['severity'] == 'high'])
+        
+        risk_level = 'Low'
+        if high_severity_count > 0:
+            risk_level = 'High'
+        elif any(o['severity'] == 'medium' for o in outbreak_data):
+            risk_level = 'Medium'
+        
+        return jsonify({
+            'status': 'success',
+            'timestamp': datetime.now().isoformat(),
+            'location': location,
+            'summary': {
+                'total_outbreaks': len(outbreak_data),
+                'total_cases': total_cases,
+                'risk_level': risk_level,
+                'high_severity_count': high_severity_count
+            },
+            'outbreaks': outbreak_data
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting outbreak data: {str(e)}")
+        return jsonify({'error': 'Failed to retrieve outbreak data'}), 500
+
+@app.route('/outbreak-stats', methods=['GET'])
+def get_outbreak_stats():
+    """Get outbreak statistics summary"""
+    try:
+        # Mock statistics - in real app, this would be calculated from database
+        stats = {
+            'timestamp': datetime.now().isoformat(),
+            'global_stats': {
+                'total_cases_this_week': 209,
+                'active_outbreaks': 5,
+                'countries_affected': 4,
+                'risk_level': 'Medium',
+                'trend': 'stable'
+            },
+            'disease_breakdown': {
+                'Melanoma': {'cases': 78, 'severity': 'high'},
+                'Eczema': {'cases': 45, 'severity': 'medium'},
+                'Acne': {'cases': 34, 'severity': 'low'},
+                'Rosacea': {'cases': 29, 'severity': 'medium'},
+                'Psoriasis': {'cases': 23, 'severity': 'low'}
+            },
+            'regional_risk': {
+                'north-america': 'medium',
+                'europe': 'low',
+                'asia': 'low',
+                'oceania': 'high'
+            }
+        }
+        
+        return jsonify(stats)
+        
+    except Exception as e:
+        logger.error(f"Error getting outbreak stats: {str(e)}")
+        return jsonify({'error': 'Failed to retrieve outbreak statistics'}), 500
 
 @app.route('/analyze', methods=['POST'])
 def analyze_image():

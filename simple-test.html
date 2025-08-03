@@ -89,6 +89,228 @@
             color: #856404;
             border: 1px solid #ffeaa7;
         }
+
+        /* Outbreak Section Styles */
+        .outbreak-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .outbreak-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .outbreak-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-select {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .location-select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .outbreak-status {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .indicator-dot.green {
+            background: #28a745;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .indicator-dot.yellow {
+            background: #ffc107;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+        }
+
+        .indicator-dot.red {
+            background: #dc3545;
+            box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+        }
+
+        .outbreak-alerts {
+            margin-bottom: 30px;
+        }
+
+        .alert-item {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert-item.high {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .alert-item.medium {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+        }
+
+        .alert-item.low {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .alert-severity {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .alert-severity.high {
+            background: #dc3545;
+            color: white;
+        }
+
+        .alert-severity.medium {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .alert-severity.low {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .alert-details {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .outbreak-stats {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .outbreak-stats h3 {
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notification-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 300px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-popup.show {
+            transform: translateX(0);
+        }
+
+        .notification-popup .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            float: right;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +332,55 @@
             <h3>Analysis Result:</h3>
             <img id="preview" class="preview" alt="Uploaded image">
             <div id="analysisResult"></div>
+        </div>
+
+        <!-- Disease Outbreak Alerts Section -->
+        <div class="outbreak-section">
+            <h2>🚨 Disease Outbreak Alerts</h2>
+            <div class="outbreak-controls">
+                <button class="btn" onclick="enableNotifications()">
+                    🔔 Enable Alerts
+                </button>
+                <button class="btn" onclick="checkOutbreaks()">
+                    🔄 Check Updates
+                </button>
+                <select id="locationSelect" class="location-select" title="Select location for outbreak monitoring" aria-label="Location selection for outbreak alerts">
+                    <option value="global">Global</option>
+                    <option value="north-america">North America</option>
+                    <option value="europe">Europe</option>
+                    <option value="asia">Asia</option>
+                    <option value="local">My Area</option>
+                </select>
+            </div>
+            
+            <div id="outbreakStatus" class="outbreak-status">
+                <div class="status-indicator">
+                    <span class="indicator-dot green"></span>
+                    <span>Monitoring active - No major outbreaks detected</span>
+                </div>
+            </div>
+
+            <div id="outbreakAlerts" class="outbreak-alerts">
+                <!-- Outbreak alerts will be populated here -->
+            </div>
+
+            <div class="outbreak-stats">
+                <h3>📊 Current Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCases">156</div>
+                        <div class="stat-label">Cases This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeOutbreaks">3</div>
+                        <div class="stat-label">Active Outbreaks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="riskLevel">Low</div>
+                        <div class="stat-label">Risk Level</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -238,6 +509,286 @@
                 </div>
             `;
         }
+
+        // Outbreak Alert System
+        let notificationsEnabled = false;
+        let outbreakData = [];
+
+        // Mock outbreak data
+        const mockOutbreaks = [
+            {
+                id: 1,
+                disease: "Eczema",
+                location: "California, USA",
+                severity: "medium",
+                cases: 45,
+                trend: "increasing",
+                date: "2025-08-02",
+                description: "Seasonal eczema outbreak reported in coastal areas. Higher humidity levels may be contributing factor."
+            },
+            {
+                id: 2,
+                disease: "Psoriasis",
+                location: "London, UK",
+                severity: "low",
+                cases: 23,
+                trend: "stable",
+                date: "2025-08-01",
+                description: "Minor increase in psoriasis cases following extreme weather patterns."
+            },
+            {
+                id: 3,
+                disease: "Melanoma",
+                location: "Australia",
+                severity: "high",
+                cases: 78,
+                trend: "increasing",
+                date: "2025-08-03",
+                description: "Summer season showing increased melanoma detections. Enhanced UV exposure warnings in effect."
+            }
+        ];
+
+        function enableNotifications() {
+            if (!notificationsEnabled) {
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            notificationsEnabled = true;
+                            showNotificationPopup('🔔 Outbreak alerts enabled! You will receive notifications about skin disease outbreaks in your area.', 'success');
+                            updateOutbreakStatus();
+                        } else {
+                            showNotificationPopup('❌ Notification permission denied. You can still view alerts on this page.', 'warning');
+                        }
+                    });
+                } else {
+                    showNotificationPopup('⚠️ Your browser does not support notifications, but you can still view alerts here.', 'warning');
+                }
+            } else {
+                showNotificationPopup('✅ Notifications are already enabled!', 'info');
+            }
+        }
+
+        function checkOutbreaks() {
+            // Check for real outbreak data from API
+            showNotificationPopup('🔄 Checking for outbreak updates...', 'info');
+            
+            fetch(`${API_URL}/outbreaks?location=${document.getElementById('locationSelect').value}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        outbreakData = data.outbreaks;
+                        displayOutbreaks(outbreakData);
+                        updateStatistics(data.summary);
+                        updateOutbreakStatus();
+                        showNotificationPopup('✅ Outbreak data updated successfully!', 'success');
+                    } else {
+                        throw new Error('Failed to fetch outbreak data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching outbreak data:', error);
+                    showNotificationPopup('⚠️ Using local data - API not available', 'warning');
+                    loadOutbreakData(); // Fallback to mock data
+                });
+        }
+
+        function loadOutbreakData() {
+            // Try to load from API first, fallback to mock data
+            const selectedLocation = document.getElementById('locationSelect').value;
+            
+            fetch(`${API_URL}/outbreaks?location=${selectedLocation}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        outbreakData = data.outbreaks;
+                        displayOutbreaks(outbreakData);
+                        updateStatistics(data.summary);
+                    } else {
+                        throw new Error('API error');
+                    }
+                })
+                .catch(error => {
+                    console.warn('Using mock data:', error);
+                    // Fallback to mock data
+                    const filteredOutbreaks = filterOutbreaksByLocation(mockOutbreaks, selectedLocation);
+                    displayOutbreaks(filteredOutbreaks);
+                    updateStatistics({
+                        total_outbreaks: filteredOutbreaks.length,
+                        total_cases: filteredOutbreaks.reduce((sum, o) => sum + o.cases, 0),
+                        risk_level: filteredOutbreaks.some(o => o.severity === 'high') ? 'High' : 'Low',
+                        high_severity_count: filteredOutbreaks.filter(o => o.severity === 'high').length
+                    });
+                });
+            
+            updateOutbreakStatus();
+        }
+
+        function filterOutbreaksByLocation(outbreaks, location) {
+            if (location === 'global') return outbreaks;
+            
+            // Simple filtering logic - in real app, this would be more sophisticated
+            const locationMap = {
+                'north-america': ['California', 'USA', 'Canada'],
+                'europe': ['London', 'UK', 'Germany', 'France'],
+                'asia': ['Japan', 'China', 'India'],
+                'local': ['California'] // Simulating user's local area
+            };
+            
+            if (locationMap[location]) {
+                return outbreaks.filter(outbreak => 
+                    locationMap[location].some(loc => outbreak.location.includes(loc))
+                );
+            }
+            
+            return outbreaks;
+        }
+
+        function displayOutbreaks(outbreaks) {
+            const alertsContainer = document.getElementById('outbreakAlerts');
+            
+            if (outbreaks.length === 0) {
+                alertsContainer.innerHTML = '<div class="alert-item low"><div class="alert-details">✅ No active outbreaks in selected area. Stay vigilant and continue monitoring.</div></div>';
+                return;
+            }
+            
+            alertsContainer.innerHTML = outbreaks.map(outbreak => {
+                const trendIcon = outbreak.trend === 'increasing' ? '📈' : 
+                                 outbreak.trend === 'decreasing' ? '📉' : '➡️';
+                
+                const recommendations = outbreak.recommendations ? 
+                    outbreak.recommendations.map(rec => `<li>${rec}</li>`).join('') : 
+                    '<li>Consult healthcare professional for guidance</li>';
+                
+                return `
+                    <div class="alert-item ${outbreak.severity}">
+                        <div class="alert-header">
+                            <div class="alert-title">🦠 ${outbreak.disease} Outbreak - ${outbreak.location}</div>
+                            <div class="alert-severity ${outbreak.severity}">${outbreak.severity}</div>
+                        </div>
+                        <div class="alert-details">
+                            <strong>📊 Cases:</strong> ${outbreak.cases} ${trendIcon} (${outbreak.trend})<br>
+                            <strong>📅 Date:</strong> ${new Date(outbreak.date).toLocaleDateString()}<br>
+                            ${outbreak.source ? `<strong>🏥 Source:</strong> ${outbreak.source}<br>` : ''}
+                            <strong>📝 Details:</strong> ${outbreak.description}<br>
+                            ${outbreak.recommendations ? `
+                                <details style="margin-top: 10px;">
+                                    <summary style="cursor: pointer; font-weight: bold;">💡 Recommendations</summary>
+                                    <ul style="margin: 5px 0 0 20px;">${recommendations}</ul>
+                                </details>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Send notification for high severity outbreaks
+            if (notificationsEnabled) {
+                outbreaks.forEach(outbreak => {
+                    if (outbreak.severity === 'high') {
+                        sendNotification(outbreak);
+                    }
+                });
+            }
+        }
+
+        function updateStatistics(data) {
+            let totalCases, activeOutbreaks, riskLevel;
+            
+            // Handle both API response format and mock data format
+            if (data.total_cases !== undefined) {
+                // API format
+                totalCases = data.total_cases;
+                activeOutbreaks = data.total_outbreaks;
+                riskLevel = data.risk_level;
+            } else {
+                // Mock data format (array of outbreaks)
+                totalCases = data.reduce((sum, outbreak) => sum + outbreak.cases, 0);
+                activeOutbreaks = data.length;
+                const highSeverityCount = data.filter(o => o.severity === 'high').length;
+                
+                riskLevel = 'Low';
+                if (highSeverityCount > 0) riskLevel = 'High';
+                else if (data.some(o => o.severity === 'medium')) riskLevel = 'Medium';
+            }
+            
+            document.getElementById('totalCases').textContent = totalCases;
+            document.getElementById('activeOutbreaks').textContent = activeOutbreaks;
+            document.getElementById('riskLevel').textContent = riskLevel;
+            
+            // Update risk level color
+            const riskElement = document.getElementById('riskLevel');
+            riskElement.style.color = riskLevel === 'High' ? '#dc3545' : 
+                                     riskLevel === 'Medium' ? '#ffc107' : '#28a745';
+        }
+
+        function updateOutbreakStatus() {
+            const statusContainer = document.getElementById('outbreakStatus');
+            const selectedLocation = document.getElementById('locationSelect').value;
+            const locationOutbreaks = filterOutbreaksByLocation(mockOutbreaks, selectedLocation);
+            
+            let statusText, dotClass;
+            
+            if (locationOutbreaks.some(o => o.severity === 'high')) {
+                statusText = `High risk outbreak detected in ${selectedLocation === 'global' ? 'monitored areas' : selectedLocation}`;
+                dotClass = 'red';
+            } else if (locationOutbreaks.some(o => o.severity === 'medium')) {
+                statusText = `Medium risk conditions in ${selectedLocation === 'global' ? 'some areas' : selectedLocation}`;
+                dotClass = 'yellow';
+            } else {
+                statusText = `Monitoring active - ${notificationsEnabled ? 'Notifications enabled' : 'Enable notifications for alerts'}`;
+                dotClass = 'green';
+            }
+            
+            statusContainer.innerHTML = `
+                <div class="status-indicator">
+                    <span class="indicator-dot ${dotClass}"></span>
+                    <span>${statusText}</span>
+                </div>
+            `;
+        }
+
+        function sendNotification(outbreak) {
+            if (notificationsEnabled && 'Notification' in window && Notification.permission === 'granted') {
+                new Notification(`🚨 ${outbreak.disease} Outbreak Alert`, {
+                    body: `High severity outbreak in ${outbreak.location}. ${outbreak.cases} cases reported.`,
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🚨</text></svg>'
+                });
+            }
+        }
+
+        function showNotificationPopup(message, type) {
+            const popup = document.createElement('div');
+            popup.className = 'notification-popup';
+            popup.innerHTML = `
+                <button class="close-btn" onclick="this.parentElement.remove()">&times;</button>
+                ${message}
+            `;
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => popup.classList.add('show'), 100);
+            setTimeout(() => {
+                if (popup.parentElement) {
+                    popup.classList.remove('show');
+                    setTimeout(() => popup.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Initialize outbreak system
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOutbreakData();
+            
+            // Update data every 30 seconds (in real app, this would be less frequent)
+            setInterval(() => {
+                if (Math.random() > 0.7) { // 30% chance of update
+                    checkOutbreaks();
+                }
+            }, 30000);
+            
+            // Listen for location changes
+            document.getElementById('locationSelect').addEventListener('change', loadOutbreakData);
+        });
     </script>
 </body>
 </html>
