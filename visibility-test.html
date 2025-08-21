@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIMPLE TEST - Can you see this?</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            margin: 20px; 
+            background: #f0f0f0; 
+        }
+        .big-red-box { 
+            background: red; 
+            color: white; 
+            padding: 50px; 
+            text-align: center; 
+            font-size: 30px; 
+            margin: 20px 0;
+            border: 5px solid black;
+        }
+        .big-blue-box { 
+            background: blue; 
+            color: white; 
+            padding: 50px; 
+            text-align: center; 
+            font-size: 30px; 
+            margin: 20px 0;
+            border: 5px solid black;
+        }
+        .outbreak-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="big-red-box">
+        🔴 RED BOX - CAN YOU SEE THIS?
+    </div>
+    
+    <div class="big-blue-box">
+        🔵 BLUE BOX - CAN YOU SEE THIS?
+    </div>
+    
+    <div class="outbreak-section">
+        <h1>🚨 OUTBREAK ALERTS SECTION</h1>
+        <h2>Disease Outbreak Monitoring</h2>
+        <p>If you can see this purple gradient section, the outbreak alerts are working!</p>
+        <button onclick="alert('Outbreak alerts are working!')">Click to Test</button>
+    </div>
+    
+    <div class="big-red-box">
+        🔴 ANOTHER RED BOX AT THE BOTTOM
+    </div>
+    
+    <script>
+        console.log('✅ Simple test page loaded successfully!');
+        alert('🎉 Page loaded! You should see red boxes, blue box, and purple outbreak section');
+    </script>
+</body>
+</html>

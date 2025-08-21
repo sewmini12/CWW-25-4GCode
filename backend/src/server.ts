@@ -6,7 +6,8 @@ import compression from 'compression';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import { createServer } from 'http';
-import { Server } from 'socket.io';
+// @ts-ignore
+import { Server, Socket } from 'socket.io';
 import dotenv from 'dotenv';
 
 // Routes
@@ -34,7 +35,7 @@ const io = new Server(server, {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 7123; // Backend server on port 7123
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/skincare-ai';
 
 // Rate limiting
@@ -76,10 +77,10 @@ app.use('/api/outbreaks', outbreakRoutes);
 app.use(errorHandler);
 
 // Socket.io connection handling
-io.on('connection', (socket) => {
+io.on('connection', (socket: any) => {
   console.log('User connected:', socket.id);
   
-  socket.on('join', (userId) => {
+  socket.on('join', (userId: string) => {
     socket.join(userId);
     console.log(`User ${userId} joined room`);
   });

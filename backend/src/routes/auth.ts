@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
@@ -13,7 +13,7 @@ router.post('/register',
     body('firstName').trim().isLength({ min: 1 }),
     body('lastName').trim().isLength({ min: 1 })
   ],
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -57,7 +57,7 @@ router.post('/login',
     body('email').isEmail().normalizeEmail(),
     body('password').exists()
   ],
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
