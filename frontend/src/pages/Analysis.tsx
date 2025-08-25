@@ -32,31 +32,54 @@ const Analysis: React.FC = () => {
 
   const analyzeImage = async (file: File) => {
     setAnalyzing(true);
-    try {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+    // Simulate analysis delay
+    setTimeout(() => {
+      // Dummy result data
+      setResult({
+        id: 'dummy-analysis-1',
+        userId: 'user-1',
+        imageUrl: uploadedImage || '',
+        confidence: 0.92,
+        status: 'completed',
+        createdAt: new Date().toISOString(),
+        predictions: [
+          {
+            confidence: 0.92,
+            condition: {
+              id: 'eczema',
+              name: 'Eczema',
+              description: 'A common skin condition causing redness and itching.',
+              symptoms: ['Redness', 'Itching', 'Dry skin'],
+              severity: 'mild',
+              contagious: false,
+              treatments: [
+                {
+                  id: '1',
+                  name: 'Moisturizer',
+                  description: 'Apply twice daily to affected area.',
+                  type: 'medication',
+                  instructions: ['Use after bathing', 'Apply before bed']
+                },
+                {
+                  id: '2',
+                  name: 'Topical Steroid',
+                  description: 'Use as prescribed by your doctor.',
+                  type: 'medication',
+                  instructions: ['Apply a thin layer to affected area']
+                }
+              ],
+            },
+            recommendedActions: [
+              'Keep skin moisturized',
+              'Avoid harsh soaps',
+              'Consult a dermatologist if symptoms persist'
+            ],
+          }
+        ]
       });
-
-      if (response.ok) {
-        const analysisResult = await response.json();
-        setResult(analysisResult.data);
-        toast.success('Analysis completed successfully!');
-      } else {
-        throw new Error('Analysis failed');
-      }
-    } catch (error) {
-      toast.error('Failed to analyze image. Please try again.');
-      console.error('Analysis error:', error);
-    } finally {
+      toast.success('Analysis completed successfully!');
       setAnalyzing(false);
-    }
+    }, 1500);
   };
 
   const resetAnalysis = () => {

@@ -40,12 +40,6 @@ const Notifications: React.FC = () => {
     <div className={styles['notifications-bg']}>
       <div className="max-w-3xl mx-auto py-8">
         <h1 className={`text-3xl font-bold mb-8 text-center ${styles['notifications-title']}`}>Notifications & Outbreak Alerts</h1>
-        {/* Map View Placeholder */}
-        <div className="mb-8">
-          <div className={styles['map-placeholder']}>
-            🗺️ Map view coming soon (Google Maps API)
-          </div>
-        </div>
         {/* Notification Toggle */}
         <div className="flex items-center mb-8 justify-end">
           <label className={styles['toggle-label']} htmlFor="notifications-toggle">Enable Notifications</label>
