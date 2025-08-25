@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - SkinCare AI</title>
+  <style>
+    :root {
+      --primary: #009688;
+      --secondary: #64B5F6;
+      --background: #FFFFFF;
+      --text: #37474F;
+      --warning: #FF7043;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: var(--background);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 40px 30px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--background);
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 3px solid var(--secondary);
+    }
+    .user-details {
+      color: var(--text);
+    }
+    .user-details .user-name span:first-child { color: var(--primary); }
+    .user-details .user-email span:first-child { color: var(--secondary); }
+    .user-details .user-role span:first-child { color: var(--warning); }
+    .user-details .user-location span:first-child { color: var(--primary); }
+    .user-details .user-medical span:first-child { color: var(--secondary); }
+    .user-name, .user-email, .user-role, .user-location, .user-medical {
+      margin-bottom: 4px;
+      font-size: 1.1rem;
+    }
+    .logout-btn {
+      background: var(--warning);
+      color: var(--background);
+      border: none;
+      border-radius: 25px;
+      padding: 12px 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .logout-btn:hover {
+      background: #e65100;
+    }
+    .dashboard-nav {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--primary);
+      color: var(--background);
+      border: none;
+      border-radius: 25px;
+      padding: 12px 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .nav-btn:hover {
+      background: var(--secondary);
+      color: var(--text);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(100,181,246,0.2);
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: #f8f9fa;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      padding: 30px 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+    .card-desc {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+    .card-action {
+      background: var(--secondary);
+      color: var(--background);
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .card-action:hover {
+      background: var(--warning);
+      color: var(--background);
+    }
+    @media (max-width: 900px) {
+      .container { padding: 20px 5px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="user-info">
+        <div class="avatar" id="userAvatar">J</div>
+        <div class="user-details">
+          <div class="user-name" id="userName">
+            <span>👤</span> <span id="profileName">Jane Doe</span>
+          </div>
+          <div class="user-email" id="userEmail">
+            <span>✉️</span> <span id="profileEmail">jane.doe@email.com</span>
+          </div>
+          <div class="user-role" id="userRole">
+            <span>🛡️</span> <span id="profileRole">User</span>
+          </div>
+          <div class="user-location" id="userLocation">
+            <span>📍</span> <span id="profileLocation">Colombo, Sri Lanka</span>
+          </div>
+          <div class="user-medical" id="userMedical">
+            <span>🏥</span> <span id="profileMedical">No allergies, No medications</span>
+          </div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="dashboard-nav">
+      <a href="simple-test.html" class="nav-btn">🏠 Main Dashboard</a>
+      <a href="outbreak-alerts.html" class="nav-btn">🚨 Outbreak Alerts</a>
+      <a href="notifications.html" class="nav-btn">🔔 Notifications</a>
+      <a href="#" class="nav-btn">📊 Analysis History</a>
+      <a href="#" class="nav-btn">⚙️ Settings</a>
+    </div>
+    <div class="dashboard-grid">
+      <div class="card">
+        <div class="card-icon">📷</div>
+        <div class="card-title">Analyze Skin Photo</div>
+        <div class="card-desc">Upload a skin photo for instant AI analysis and recommendations.</div>
+        <button class="card-action" onclick="window.location.href='simple-test.html'">Start Analysis</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚨</div>
+        <div class="card-title">View Outbreak Alerts</div>
+        <div class="card-desc">Check real-time skin disease outbreak notifications in your area.</div>
+        <button class="card-action" onclick="window.location.href='outbreak-alerts.html'">See Alerts</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔔</div>
+        <div class="card-title">Notifications</div>
+        <div class="card-desc">View important alerts and updates for your account.</div>
+        <button class="card-action" onclick="window.location.href='notifications.html'">View Notifications</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Analysis History</div>
+        <div class="card-desc">Review your previous skin analysis results and recommendations.</div>
+        <button class="card-action" onclick="alert('Analysis history coming soon!')">View History</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">Account Settings</div>
+        <div class="card-desc">Manage your profile, notification preferences, and privacy settings.</div>
+        <button class="card-action" onclick="alert('Settings page coming soon!')">Manage Settings</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Simulate user info (replace with real data after login)
+    const user = {
+      name: 'Jane Doe',
+      email: 'jane.doe@email.com',
+      role: 'User',
+      location: 'Colombo, Sri Lanka',
+      medical: 'No allergies, No medications',
+    };
+    document.getElementById('profileName').textContent = user.name;
+    document.getElementById('profileEmail').textContent = user.email;
+    document.getElementById('profileRole').textContent = user.role;
+    document.getElementById('profileLocation').textContent = user.location;
+    document.getElementById('profileMedical').textContent = user.medical;
+    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+    function logout() {
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
