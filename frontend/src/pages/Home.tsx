@@ -16,7 +16,7 @@ const Home: React.FC = () => {
         </p>
         <div className="space-x-4">
           <Link
-            to="/register"
+            to="/login"
             className="btn-primary text-lg px-8 py-3"
           >
             Get Started
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
           Join thousands of users who trust our AI-powered skin analysis
         </p>
         <Link
-          to="/register"
+          to="/login"
           className="bg-white text-emerald-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition-colors"
         >
           Create Free Account
