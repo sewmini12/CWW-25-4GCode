@@ -1,0 +1,32 @@
+# Django Backend Setup Instructions
+
+1. Open a terminal in the backend folder:
+   cd backend
+
+2. Create a virtual environment (recommended):
+   python -m venv venv
+   venv\Scripts\activate
+
+3. Install dependencies:
+   pip install -r requirements.txt
+
+4. Start a new Django project:
+   django-admin startproject cww_backend .
+
+5. Create a new app for authentication:
+   python manage.py startapp authapp
+
+6. Add 'rest_framework' and 'authapp' to INSTALLED_APPS in cww_backend/settings.py
+
+7. Run initial migrations:
+   python manage.py migrate
+
+8. Create a superuser (optional, for admin):
+   python manage.py createsuperuser
+
+9. Start the development server:
+   python manage.py runserver
+
+# Next Steps
+- Implement login API in authapp/views.py
+- Connect frontend to Django REST API

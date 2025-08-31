@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - SkinCare AI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 40px 30px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 22px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.2);
+        }
+        .nav-btn.active {
+            background: #ff6b6b;
+        }
+        .notifications-list {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .notification-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
+        }
+        .notification-card.unread {
+            border-left-color: #ff6b6b;
+            background: #fff5f5;
+        }
+        .notification-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-top: 2px;
+        }
+        .notification-content {
+            flex: 1;
+        }
+        .notification-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .notification-desc {
+            color: #555;
+            font-size: 0.98rem;
+            margin-bottom: 8px;
+        }
+        .notification-meta {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 7px 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .action-btn.read {
+            background: #66bb6a;
+        }
+        .action-btn.delete {
+            background: #ff6b6b;
+        }
+        .action-btn:hover {
+            opacity: 0.85;
+        }
+        .settings-section {
+            margin-top: 50px;
+        }
+        .settings-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .settings-group {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+        }
+        .setting-label {
+            font-weight: 500;
+            color: #555;
+        }
+        .setting-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .setting-option:last-child {
+            border-bottom: none;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 45px;
+            height: 22px;
+            background: #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .toggle-switch.active {
+            background: #667eea;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .toggle-switch.active::after {
+            transform: translateX(23px);
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 15px 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">🔔 Notifications</div>
+            <div class="nav">
+                <a href="user-dashboard.html" class="nav-btn">🏠 Dashboard</a>
+                <a href="outbreak-alerts.html" class="nav-btn">🚨 Outbreak Alerts</a>
+                <a href="notifications.html" class="nav-btn active">🔔 Notifications</a>
+            </div>
+        </div>
+        <div class="notifications-list" id="notificationsList">
+            <div style="text-align: center; color: #888; padding: 40px;">Loading notifications...</div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-title">Notification Settings</div>
+            <div class="settings-group">
+                <div class="setting-option">
+                    <span class="setting-label">Outbreak Alerts</span>
+                    <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-option">
+                    <span class="setting-label">Analysis Results</span>
+                    <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-option">
+                    <span class="setting-label">System Updates</span>
+                    <div class="toggle-switch" onclick="toggleSetting(this)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Load notifications (mock for now)
+        function loadNotifications() {
+            const notifications = [
+                {
+                    id: 1,
+                    title: 'New Outbreak Alert',
+                    desc: 'High risk eczema outbreak detected in your area.',
+                    meta: '2 minutes ago',
+                    unread: true,
+                    icon: '🚨'
+                },
+                {
+                    id: 2,
+                    title: 'Analysis Complete',
+                    desc: 'Your skin photo analysis is ready. View results now.',
+                    meta: '10 minutes ago',
+                    unread: false,
+                    icon: '📋'
+                },
+                {
+                    id: 3,
+                    title: 'System Update',
+                    desc: 'New features added to SkinCare AI. Check what’s new!',
+                    meta: '1 hour ago',
+                    unread: true,
+                    icon: '🆕'
+                }
+            ];
+            renderNotifications(notifications);
+        }
+        function renderNotifications(list) {
+            const notificationsList = document.getElementById('notificationsList');
+            if (!list.length) {
+                notificationsList.innerHTML = `<div style="text-align: center; color: #888; padding: 40px;">No notifications found.</div>`;
+                return;
+            }
+            notificationsList.innerHTML = list.map(n => `
+                <div class="notification-card${n.unread ? ' unread' : ''}">
+                    <div class="notification-icon">${n.icon}</div>
+                    <div class="notification-content">
+                        <div class="notification-title">${n.title}</div>
+                        <div class="notification-desc">${n.desc}</div>
+                        <div class="notification-meta">${n.meta}</div>
+                        <div class="notification-actions">
+                            <button class="action-btn read" onclick="markAsRead(${n.id})">Mark as Read</button>
+                            <button class="action-btn delete" onclick="deleteNotification(${n.id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function markAsRead(id) {
+            // In real implementation, send API request
+            alert('Notification marked as read: ' + id);
+        }
+        function deleteNotification(id) {
+            // In real implementation, send API request
+            alert('Notification deleted: ' + id);
+        }
+        function toggleSetting(el) {
+            el.classList.toggle('active');
+        }
+        loadNotifications();
+    </script>
+</body>
+</html>

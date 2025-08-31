@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outbreak Alerts Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .test-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        /* Outbreak Alerts Styles */
+        .outbreak-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        }
+
+        .outbreak-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .outbreak-title {
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .outbreak-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .outbreak-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn.success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        }
+
+        .location-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .location-label {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .location-select {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .outbreak-status {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            background: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .status-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .last-update {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            opacity: 0.9;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .outbreak-alerts {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .alerts-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .alert-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .alerts-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .alert-item:hover {
+            transform: translateX(5px);
+        }
+
+        .alert-item.high {
+            border-left-color: #f44336;
+        }
+
+        .alert-item.medium {
+            border-left-color: #FF9800;
+        }
+
+        .alert-item.low {
+            border-left-color: #4CAF50;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .alert-severity {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .alert-severity.high {
+            background: rgba(244, 67, 54, 0.3);
+            color: #ffcdd2;
+        }
+
+        .alert-severity.medium {
+            background: rgba(255, 152, 0, 0.3);
+            color: #ffe0b2;
+        }
+
+        .alert-severity.low {
+            background: rgba(76, 175, 80, 0.3);
+            color: #c8e6c9;
+        }
+
+        .alert-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🧪 Outbreak Alerts System Test</h1>
+        <p>This is a standalone test of the outbreak alerts section</p>
+    </div>
+
+    <!-- Disease Outbreak Alerts Section -->
+    <div class="outbreak-section">
+        <div class="outbreak-header">
+            <h2 class="outbreak-title">🚨 Disease Outbreak Alerts</h2>
+            <div class="outbreak-subtitle">Real-time monitoring of skin disease outbreaks worldwide</div>
+        </div>
+
+        <div class="outbreak-controls">
+            <div class="control-group">
+                <button class="btn success" onclick="enableNotifications()">
+                    <span id="notificationIcon">🔔</span>
+                    <span id="notificationText">Enable Alerts</span>
+                </button>
+                <button class="btn" onclick="refreshOutbreaks()">
+                    <span>🔄</span>
+                    Refresh Data
+                </button>
+            </div>
+            <div class="location-controls">
+                <label for="locationSelect" class="location-label">📍 Monitor Region:</label>
+                <select id="locationSelect" class="location-select">
+                    <option value="global">🌍 Global</option>
+                    <option value="north-america">🇺🇸 North America</option>
+                    <option value="europe">🇪🇺 Europe</option>
+                    <option value="asia">🇯🇵 Asia</option>
+                    <option value="oceania">🇦🇺 Oceania</option>
+                    <option value="local">📍 My Area</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="outbreakStatus" class="outbreak-status">
+            <div class="status-indicator">
+                <span class="indicator-dot"></span>
+                <span class="status-text">Monitoring active - Demo data loaded</span>
+            </div>
+            <div class="last-update">Last updated: <span id="lastUpdateTime">Just now</span></div>
+        </div>
+
+        <div class="outbreak-dashboard">
+            <div class="dashboard-stats">
+                <div class="stat-card total-cases">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalCases">268</div>
+                        <div class="stat-label">Cases This Week</div>
+                    </div>
+                </div>
+                <div class="stat-card active-outbreaks">
+                    <div class="stat-icon">🚨</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="activeOutbreaks">3</div>
+                        <div class="stat-label">Active Outbreaks</div>
+                    </div>
+                </div>
+                <div class="stat-card risk-level">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="riskLevel">Medium</div>
+                        <div class="stat-label">Risk Level</div>
+                    </div>
+                </div>
+                <div class="stat-card trend">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="trendIndicator">+12%</div>
+                        <div class="stat-label">7-Day Trend</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="outbreakAlerts" class="outbreak-alerts">
+            <div class="alerts-header">
+                <h3>📢 Current Alerts</h3>
+                <div class="alert-filters">
+                    <button class="filter-btn active" data-severity="all">All</button>
+                    <button class="filter-btn" data-severity="high">High</button>
+                    <button class="filter-btn" data-severity="medium">Medium</button>
+                    <button class="filter-btn" data-severity="low">Low</button>
+                </div>
+            </div>
+            <div id="alertsList" class="alerts-list">
+                <div class="alert-item high">
+                    <div class="alert-header">
+                        <h4 class="alert-title">Eczema Outbreak in Metropolitan Area</h4>
+                        <span class="alert-severity high">HIGH</span>
+                    </div>
+                    <div class="alert-location">📍 New York, NY</div>
+                    <div class="alert-description">Increased cases of atopic dermatitis reported in urban areas, possibly linked to air quality.</div>
+                    <div class="alert-meta">
+                        <span>Cases: 156</span>
+                        <span>Trend: 📈 increasing</span>
+                        <span>Updated: 2 hours ago</span>
+                    </div>
+                </div>
+
+                <div class="alert-item medium">
+                    <div class="alert-header">
+                        <h4 class="alert-title">Psoriasis Cases Rising</h4>
+                        <span class="alert-severity medium">MEDIUM</span>
+                    </div>
+                    <div class="alert-location">📍 Los Angeles, CA</div>
+                    <div class="alert-description">Stress-related psoriasis flare-ups increasing in the region.</div>
+                    <div class="alert-meta">
+                        <span>Cases: 89</span>
+                        <span>Trend: ➡️ stable</span>
+                        <span>Updated: 4 hours ago</span>
+                    </div>
+                </div>
+
+                <div class="alert-item low">
+                    <div class="alert-header">
+                        <h4 class="alert-title">Contact Dermatitis Alert</h4>
+                        <span class="alert-severity low">LOW</span>
+                    </div>
+                    <div class="alert-location">📍 Chicago, IL</div>
+                    <div class="alert-description">Seasonal allergic contact dermatitis cases within normal range.</div>
+                    <div class="alert-meta">
+                        <span>Cases: 23</span>
+                        <span>Trend: 📉 decreasing</span>
+                        <span>Updated: 6 hours ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🧪 Outbreak alerts test page loaded successfully!');
+        
+        function enableNotifications() {
+            const icon = document.getElementById('notificationIcon');
+            const text = document.getElementById('notificationText');
+            
+            if (icon.textContent === '🔔') {
+                icon.textContent = '🔕';
+                text.textContent = 'Alerts Disabled';
+                alert('Demo: Notifications would be disabled');
+            } else {
+                icon.textContent = '🔔';
+                text.textContent = 'Enable Alerts';
+                alert('Demo: Notifications would be enabled');
+            }
+        }
+        
+        function refreshOutbreaks() {
+            alert('Demo: Outbreak data would be refreshed');
+            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
+        }
+        
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const severity = this.dataset.severity;
+                const alerts = document.querySelectorAll('.alert-item');
+                
+                alerts.forEach(alert => {
+                    if (severity === 'all' || alert.classList.contains(severity)) {
+                        alert.style.display = 'block';
+                    } else {
+                        alert.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Add some interactivity
+        document.getElementById('locationSelect').addEventListener('change', function() {
+            alert(`Demo: Monitoring region changed to: ${this.options[this.selectedIndex].text}`);
+        });
+    </script>
+</body>
+</html>
