@@ -88,7 +88,11 @@ const Analysis: React.FC = () => {
     setAnalyzing(false);
   };
 
+
+
   return (
+    
+    
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -98,6 +102,27 @@ const Analysis: React.FC = () => {
           Upload a clear photo of your skin condition for AI-powered analysis
         </p>
       </div>
+
+      <div className="instruction box flex flex-col md:flex-row items-center justify-center gap-6 mb-8">
+      <img
+        src="/assets/wrong1.png"
+        alt="Example of a correct skin photo"
+        className="w-48 h-70 object-cover rounded-lg border"
+      />
+
+      <img
+        src="/assets/right1.png"
+        alt="Example of a correct skin photo"
+        className="w-48 h-80 object-cover rounded-lg border"
+      />
+      <ul className="text-left text-gray-700 space-y-2">
+        <li>✔️ Use good lighting (natural daylight is best)</li>
+        <li>✔️ Focus on the affected skin area</li>
+        <li>✔️ Avoid blurry or dark images</li>
+        <li>✔️ Remove makeup or creams before taking the photo</li>
+        <li>✔️ Only one skin area per photo</li>
+      </ul>
+    </div>
 
       {!uploadedImage && (
         <div className="card mb-8">
