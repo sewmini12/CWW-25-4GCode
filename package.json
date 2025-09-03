@@ -6,7 +6,7 @@
   "scripts": {
     "install:all": "npm run install:backend && npm run install:frontend && npm run install:ai",
     "install:backend": "cd backend && npm install",
-    "install:frontend": "cd frontend && npm install", 
+    "install:frontend": "cd frontend && npm install",
     "install:ai": "cd ai-service && pip install -r requirements.txt",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:ai\"",
     "dev:backend": "cd backend && npm run dev",
@@ -30,6 +30,13 @@
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
+    "@types/jwt-decode": "^2.2.1",
     "concurrently": "^7.6.0"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.12.2",
+    "jwt-decode": "^4.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }
