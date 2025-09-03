@@ -1,4 +1,3 @@
-// src/pages/Signup.tsx
 import React, { useState } from "react";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import * as jwt_decode from "jwt-decode";
@@ -46,7 +45,6 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    // Decode JWT token safely with TypeScript
     const decoded = (jwt_decode as any)(token) as GoogleUser;
     const email = decoded.email;
 
