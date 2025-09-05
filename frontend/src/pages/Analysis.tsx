@@ -108,13 +108,13 @@ const Analysis: React.FC = () => {
       <img
         src="/assets/wrong1.png"
         alt="Example of a correct skin photo"
-        className="w-48 h-64 object-cover rounded-lg border"
+        className=" object-cover rounded-lg border"
       />
 
       <img
         src="/assets/right1.png"
         alt="Example of a correct skin photo"
-        className="w-48 h-64 object-cover rounded-lg border"
+        className=" object-cover rounded-lg border"
       />
       <ul className="text-left text-gray-700 space-y-2">
         <li> ● Use good lighting (natural daylight is best)</li>
