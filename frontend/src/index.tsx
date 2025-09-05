@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App';
 
-const clientId = 'YOUR_GOOGLE_CLIENT_ID'; // replace with your real client ID
+const clientId = '469098287096-3l6qheoas0n90vlhbmfl7iqauoie930r.apps.googleusercontent.com'; // replace with your real client ID
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
