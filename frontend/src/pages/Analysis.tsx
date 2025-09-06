@@ -1,22 +1,33 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { PhotoIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 import { AnalysisResult } from '../types';
+import WebcamBase from "react-webcam";
+const Webcam: any = WebcamBase;
 
 const Analysis: React.FC = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [showWebcam, setShowWebcam] = useState(false);
+  const webcamRef = useRef<any>(null);
+
+  // Handler for file input (camera or upload)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setUploadedImage(previewUrl);
+      analyzeImage(file);
+    }
+  };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      // Create preview URL
       const previewUrl = URL.createObjectURL(file);
       setUploadedImage(previewUrl);
-      
-      // Start analysis
       analyzeImage(file);
     }
   }, []);
@@ -30,15 +41,13 @@ const Analysis: React.FC = () => {
     maxSize: 5 * 1024 * 1024, // 5MB
   });
 
-  const analyzeImage = async (file: File) => {
+  const analyzeImage = async (file: File | string) => {
     setAnalyzing(true);
-    // Simulate analysis delay
     setTimeout(() => {
-      // Dummy result data
       setResult({
         id: 'dummy-analysis-1',
         userId: 'user-1',
-        imageUrl: uploadedImage || '',
+        imageUrl: typeof file === 'string' ? file : uploadedImage || '',
         confidence: 0.92,
         status: 'completed',
         createdAt: new Date().toISOString(),
@@ -86,52 +95,90 @@ const Analysis: React.FC = () => {
     setResult(null);
     setUploadedImage(null);
     setAnalyzing(false);
+    setShowWebcam(false);
   };
 
-
+  // Webcam capture
+  const capture = () => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setUploadedImage(imageSrc);
+      analyzeImage(imageSrc);
+      setShowWebcam(false);
+    }
+  };
 
   return (
-    
-    
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           Skin Condition Analysis
         </h1>
         <p className="text-lg text-gray-600">
-          Upload a clear photo of your skin condition for AI-powered analysis
+          Upload or take a clear photo of your skin condition for AI-powered analysis
         </p>
       </div>
 
       <div className="instruction-wrapper">
-        <div className="instruction-box flex flex-col md:flex-row items-center justify-center gap-6 mb-8">
-      <img
-        src="/assets/wrong1.png"
-        alt="Example of a correct skin photo"
-        className=" object-cover rounded-lg border"
-      />
-
-      <img
-        src="/assets/right1.png"
-        alt="Example of a correct skin photo"
-        className=" object-cover rounded-lg border"
-      />
-      <ul className="text-left text-gray-700 space-y-2">
-        <li> ● Use good lighting (natural daylight is best)</li>
-        <li> ● Focus on the affected skin area</li>
-        <li> ● Avoid blurry or dark images</li>
-        <li> ● Remove makeup or creams before taking the photo</li>
-        <li> ● Only one skin area per photo</li>
-      </ul>
-      </div>
-      
+        <div className="instruction-box flex flex-col md:flex-row items-center justify-center gap-2 mb-8">
+          <img
+            src="/assets/wrong1.png"
+            alt="Example of a wrong skin photo"
+            className="object-contain rounded-lg border"
+          />
+          <img
+            src="/assets/right1.png"
+            alt="Example of a correct skin photo"
+            className="object-contain rounded-lg border"
+          />
+          <ul className="text-left text-gray-700 space-y-2">
+            <li> ● Use good lighting (natural daylight is best)</li>
+            <li> ● Focus on the affected skin area</li>
+            <li> ● Avoid blurry or dark images</li>
+            <li> ● Remove makeup or creams before taking the photo</li>
+            <li> ● Only one skin area per photo</li>
+          </ul>
+        </div>
       </div>
 
-      
+      {/* Camera/Upload Option */}
+      <div className="mb-8 text-center">
+        <label htmlFor="camera-upload" className="btn-primary cursor-pointer inline-block mb-2">
+          Upload Photo
+        </label>
+        <input
+          id="camera-upload"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+        <button className="btn-secondary ml-4" onClick={() => setShowWebcam((v) => !v)}>
+          {showWebcam ? 'Close Camera' : 'Take Photo with Webcam'}
+        </button>
+        <div className="text-sm text-gray-500">Supports JPEG, PNG, WebP (max 5MB)</div>
+      </div>
 
-      
+      {/* Webcam Section */}
+      {showWebcam && (
+        <div className="flex flex-col items-center mb-8">
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            width={320}
+            height={240}
+            className="rounded-lg border mb-2"
+          />
+          <button className="btn-primary" onClick={capture}>
+            Capture Photo
+          </button>
+        </div>
+      )}
 
-      {!uploadedImage && (
+      {/* Drag and drop area (optional, can remove if not needed) */}
+      {!uploadedImage && !showWebcam && (
         <div className="card mb-8">
           <div
             {...getRootProps()}
@@ -177,7 +224,6 @@ const Analysis: React.FC = () => {
           {/* Analysis Results */}
           <div className="card">
             <h3 className="text-xl font-semibold mb-4">Analysis Results</h3>
-            
             {analyzing && (
               <div className="text-center py-8">
                 <CloudArrowUpIcon className="w-12 h-12 text-emerald-600 mx-auto mb-4 animate-spin" />
@@ -185,7 +231,6 @@ const Analysis: React.FC = () => {
                 <p className="text-sm text-gray-500 mt-2">This may take a few moments</p>
               </div>
             )}
-
             {result && !analyzing && (
               <div className="space-y-6">
                 <div className="bg-emerald-50 p-4 rounded-lg">
@@ -199,14 +244,12 @@ const Analysis: React.FC = () => {
                     Confidence: {(result.predictions[0]?.confidence * 100).toFixed(1)}%
                   </p>
                 </div>
-
                 <div>
                   <h4 className="font-semibold mb-3">Description</h4>
                   <p className="text-gray-700">
                     {result.predictions[0]?.condition.description}
                   </p>
                 </div>
-
                 <div>
                   <h4 className="font-semibold mb-3">Recommended Actions</h4>
                   <ul className="space-y-2">
@@ -218,7 +261,6 @@ const Analysis: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-
                 {result.predictions[0]?.condition.treatments.length > 0 && (
                   <div>
                     <h4 className="font-semibold mb-3">Possible Treatments</h4>
@@ -232,7 +274,6 @@ const Analysis: React.FC = () => {
                     </div>
                   </div>
                 )}
-
                 <div className="bg-yellow-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-yellow-800 mb-2">
                     Important Notice
